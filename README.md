@@ -47,3 +47,16 @@ connection.connect(err => {
 
 module.exports = connection;
 ```
+
+console.table
+https://www.syncfusion.com/blogs/post/11-console-methods-in-javascript-for-effective-debugging.aspx
+
+concat 2 colums to a new one mySQL
+https://stackoverflow.com/questions/3251600/how-do-i-get-first-name-and-last-name-as-whole-name-in-a-mysql-query
+
+combine multiple columns from multiple tables
+https://stackoverflow.com/questions/8303275/select-multiple-columns-from-multiple-tables
+
+from "the table name ex. tableName" "a one or 2 character prefix for dot notation ex. t "
+    FROM tableName t
+https://stackoverflow.com/questions/8303275/select-multiple-columns-from-multiple-tables
