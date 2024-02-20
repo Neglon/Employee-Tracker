@@ -14,6 +14,7 @@ function start() {
       'Add Role',
       'View All Departments',
       'Add Department',
+      'Delete Department',
       'Exit'
     ]
   }).then(answer => {
@@ -34,6 +35,10 @@ function start() {
         viewAllDepartments();
         break;
       case 'Add Department':
+        addDepartment();
+        break;
+      case 'Delete Department':
+        deleteDepartment();
         break;
       default:
         // Exits the application when exit is chosen
@@ -42,6 +47,7 @@ function start() {
   });
 }
 
+//Function to view all employees
 function viewAllEmployees() {
     const query = `
         SELECT
@@ -65,8 +71,10 @@ function viewAllEmployees() {
     });
 }
 
+//function to add an employee
 
 
+// Function to view all departments
 function viewAllDepartments() {
     connection.query('SELECT id AS id, name AS Name FROM departments', (err, res) => {
         if (err) throw err;
@@ -75,6 +83,48 @@ function viewAllDepartments() {
     });
 }
 
+//function to add a department
+function addDepartment() {
+    inquirer.prompt({
+        name: 'name',
+        type: 'input',
+        message: 'What is the name of the department?'
+    }).then(answer => {
+        connection.query('INSERT INTO departments SET ?', { name: answer.name }, (err, res) => {
+            if (err) throw err;
+            console.log('Department added');
+            start();
+        });
+    });
+}
+
+//function to delete a department
+function deleteDepartment() {
+    connection.query('SELECT * FROM departments', (err, res) => {
+        if (err) throw err;
+        const departments = res.map(department => {
+            return {
+                name: department.name,
+                value: department.id
+            };
+        });
+        console.log(departments);
+        inquirer.prompt({
+            name: 'department',
+            type: 'list',
+            message: 'Which department would you like to delete?',
+            choices: departments
+        }).then(answer => {
+            connection.query('DELETE FROM departments WHERE id = ?', answer.department, (err, res) => {
+                if (err) throw err;
+                console.log('Department deleted');
+                start();
+            });
+        });
+    });
+}
+
+//Function to view all roles
 function ViewAllRoles() {
     connection.query('SELECT id AS id, title AS Title, salary AS Salary FROM roles', (err, res) => {
         if (err) throw err;
@@ -82,6 +132,8 @@ function ViewAllRoles() {
         start();
     });
 }
+
+//function to add a role
 
 
 start();

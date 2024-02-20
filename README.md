@@ -60,3 +60,6 @@ https://stackoverflow.com/questions/8303275/select-multiple-columns-from-multipl
 from "the table name ex. tableName" "a one or 2 character prefix for dot notation ex. t "
     FROM tableName t
 https://stackoverflow.com/questions/8303275/select-multiple-columns-from-multiple-tables
+
+object array for choices inquirer
+https://stackoverflow.com/questions/46210279/pass-objects-in-array-into-inquirer-list-choices
