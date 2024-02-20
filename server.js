@@ -9,7 +9,7 @@ function start() {
     choices: [
       'View all Employees',
       'Add Employee',
-      'Update Employee Role',
+      'Delete Employee',
       'View All Roles',
       'Add Role',
       'Delete Role',
@@ -24,8 +24,10 @@ function start() {
         viewAllEmployees();
         break;
       case 'Add Employee':
+        addEmployee(); 
         break;
-      case 'Update Employee Role':
+      case 'Delete Employee':
+        deleteEmployee();
         break;
       case 'View All Roles':
         ViewAllRoles();
@@ -77,6 +79,88 @@ function viewAllEmployees() {
 }
 
 //function to add an employee
+function addEmployee() {
+    const rolesQuery = 'SELECT id, title FROM roles';
+    connection.query(rolesQuery, (err, roles) => {
+        if (err) throw err;
+        const managersQuery = 'SELECT id, first_name, last_name FROM employees WHERE manager_id IS NULL';
+        connection.query(managersQuery, (err, managers) => {
+            if (err) throw err;
+            const rolesChoices = roles.map(role => {
+                return {
+                    name: role.title,
+                    value: role.id
+                };
+            });
+            let managersChoices = managers.map(manager => {
+                return {
+                    name: `${manager.first_name} ${manager.last_name}`,
+                    value: manager.id
+                };
+            });
+
+            // Adds a None option to the managersChoices array by unshifting it to the beginning of the array
+            managersChoices.unshift({ name: 'None', value: null });
+            
+            inquirer.prompt([
+                {
+                    name: 'first_name',
+                    type: 'input',
+                    message: 'What is the employees first name?'
+                },
+                {
+                    name: 'last_name',
+                    type: 'input',
+                    message: 'What is the employees last name?'
+                },
+                {
+                    name: 'role_id',
+                    type: 'list',
+                    message: 'What is the employees role?',
+                    choices: rolesChoices
+                },
+                {
+                    name: 'manager_id',
+                    type: 'list',
+                    message: 'Who is the employees manager?',
+                    choices: managersChoices
+                }
+            ]).then(answer => {
+                connection.query('INSERT INTO employees SET ?', answer, (err, res) => {
+                    if (err) throw err;
+                    console.log('Employee added');
+                    start();
+                });
+            });
+        });
+    });
+} 
+
+//delete an employee
+function deleteEmployee() {
+    connection.query('SELECT * FROM employees', (err, res) => {
+        if (err) throw err;
+        const employees = res.map(employee => {
+            return {
+                name: `${employee.first_name} ${employee.last_name}`,
+                value: employee.id
+            };
+        });
+        inquirer.prompt({
+            name: 'employee',
+            type: 'list',
+            message: 'Which employee would you like to delete?',
+            choices: employees
+        }).then(answer => {
+            connection.query('DELETE FROM employees WHERE id = ?', answer.employee, (err, res) => {
+                if (err) throw err;
+                console.log('Employee deleted');
+                start();
+            });
+        });
+    });
+
+}
 
 
 // Function to view all departments

@@ -63,3 +63,6 @@ https://stackoverflow.com/questions/8303275/select-multiple-columns-from-multipl
 
 object array for choices inquirer
 https://stackoverflow.com/questions/46210279/pass-objects-in-array-into-inquirer-list-choices
+
+unshift
+https://www.w3schools.com/jsref/jsref_unshift.asp
