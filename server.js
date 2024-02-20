@@ -12,6 +12,7 @@ function start() {
       'Update Employee Role',
       'View All Roles',
       'Add Role',
+      'Delete Role',
       'View All Departments',
       'Add Department',
       'Delete Department',
@@ -30,7 +31,11 @@ function start() {
         ViewAllRoles();
         break;
       case 'Add Role':
+        addRole();
         break;
+      case 'Delete Role':
+        deleteRole();
+        break;  
       case 'View All Departments':
         viewAllDepartments();
         break;
@@ -126,7 +131,16 @@ function deleteDepartment() {
 
 //Function to view all roles
 function ViewAllRoles() {
-    connection.query('SELECT id AS id, title AS Title, salary AS Salary FROM roles', (err, res) => {
+    const query = `
+        SELECT 
+            r.id AS id,
+            r.title AS Title,
+            r.salary AS Salary,
+            departments.name AS Department
+        FROM roles r
+        LEFT JOIN departments ON r.department_id = departments.id
+        `;  
+    connection.query(query, (err, res) => {
         if (err) throw err;
         console.table(res);
         start();
@@ -134,6 +148,65 @@ function ViewAllRoles() {
 }
 
 //function to add a role
+function addRole() {
+    connection.query('SELECT * FROM departments', (err, res) => {
+        if (err) throw err;
+        const departments = res.map(department => {
+            return {
+                name: department.name,
+                value: department.id
+            };
+        });
+        inquirer.prompt([
+            {
+                name: 'title',
+                type: 'input',
+                message: 'What is the title of the role?'
+            },
+            {
+                name: 'salary',
+                type: 'input',
+                message: 'What is the salary of the role?'
+            },
+            {
+                name: 'department',
+                type: 'list',
+                message: 'Which department does the role belong to?',
+                choices: departments
+            }
+        ]).then(answer => {
+            connection.query('INSERT INTO roles SET ?', { title: answer.title, salary: answer.salary, department_id: answer.department }, (err, res) => {
+                if (err) throw err;
+                console.log('Role added');
+                start();
+            });
+        });
+    });
+}
 
+//delete a role
+function deleteRole() {
+    connection.query('SELECT * FROM roles', (err, res) => {
+        if (err) throw err;
+        const roles = res.map(role => {
+            return {
+                name: role.title,
+                value: role.id
+            };
+        });
+        inquirer.prompt({
+            name: 'role',
+            type: 'list',
+            message: 'Which role would you like to delete?',
+            choices: roles
+        }).then(answer => {
+            connection.query('DELETE FROM roles WHERE id = ?', answer.role, (err, res) => {
+                if (err) throw err;
+                console.log('Role deleted');
+                start();
+            });
+        });
+    });
+}
 
 start();
