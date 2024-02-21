@@ -64,6 +64,7 @@ function start() {
 
 //Function to view all employees
 function viewAllEmployees() {
+    console.clear();
     const query = `
         SELECT
             e.id AS id,
@@ -80,6 +81,8 @@ function viewAllEmployees() {
     `;
     connection.query(query, (err, res) => {
         if (err) throw err;
+        // Clears the console
+        console.clear();
         // Displays the results in a table
         console.table(res); 
         start();
@@ -88,6 +91,7 @@ function viewAllEmployees() {
 
 //function to add an employee
 function addEmployee() {
+    console.clear();
     const rolesQuery = 'SELECT id, title FROM roles';
     connection.query(rolesQuery, (err, roles) => {
         if (err) throw err;
@@ -136,6 +140,7 @@ function addEmployee() {
             ]).then(answer => {
                 connection.query('INSERT INTO employees SET ?', answer, (err, res) => {
                     if (err) throw err;
+                    console.clear();
                     console.log('Employee added');
                     start();
                 });
@@ -146,6 +151,8 @@ function addEmployee() {
 
 //delete an employee
 function deleteEmployee() {
+    console.clear();
+    //console.log("function called")
     connection.query('SELECT * FROM employees', (err, res) => {
         if (err) throw err;
         const employees = res.map(employee => {
@@ -154,6 +161,7 @@ function deleteEmployee() {
                 value: employee.id
             };
         });
+        //console.log("pre prompt")
         inquirer.prompt({
             name: 'employee',
             type: 'list',
@@ -162,6 +170,7 @@ function deleteEmployee() {
         }).then(answer => {
             connection.query('DELETE FROM employees WHERE id = ?', answer.employee, (err, res) => {
                 if (err) throw err;
+                console.clear();
                 console.log('Employee deleted');
                 start();
             });
@@ -173,8 +182,10 @@ function deleteEmployee() {
 
 // Function to view all departments
 function viewAllDepartments() {
+    console.clear();
     connection.query('SELECT id AS id, name AS Name FROM departments', (err, res) => {
         if (err) throw err;
+        console.clear();
         console.table(res);
         start();
     });
@@ -182,6 +193,7 @@ function viewAllDepartments() {
 
 //function to add a department
 function addDepartment() {
+    console.clear();
     inquirer.prompt({
         name: 'name',
         type: 'input',
@@ -189,6 +201,7 @@ function addDepartment() {
     }).then(answer => {
         connection.query('INSERT INTO departments SET ?', { name: answer.name }, (err, res) => {
             if (err) throw err;
+            console.clear();
             console.log('Department added');
             start();
         });
@@ -197,6 +210,7 @@ function addDepartment() {
 
 //function to delete a department
 function deleteDepartment() {
+    console.clear();
     connection.query('SELECT * FROM departments', (err, res) => {
         if (err) throw err;
         const departments = res.map(department => {
@@ -205,7 +219,7 @@ function deleteDepartment() {
                 value: department.id
             };
         });
-        console.log(departments);
+        //console.log(departments);
         inquirer.prompt({
             name: 'department',
             type: 'list',
@@ -214,6 +228,7 @@ function deleteDepartment() {
         }).then(answer => {
             connection.query('DELETE FROM departments WHERE id = ?', answer.department, (err, res) => {
                 if (err) throw err;
+                console.clear();
                 console.log('Department deleted');
                 start();
             });
@@ -223,6 +238,7 @@ function deleteDepartment() {
 
 //function to update an employee role
 function updateEmployeeRole() {
+    console.clear();
     connection.query('SELECT * FROM employees', (err, employees) => {
         if (err) throw err;
         const employeesChoices = employees.map(employee => {
@@ -255,6 +271,7 @@ function updateEmployeeRole() {
             ]).then(answer => {
                 connection.query('UPDATE employees SET role_id = ? WHERE id = ?', [answer.role_id, answer.employee_id], (err, res) => {
                     if (err) throw err;
+                    console.clear();
                     console.log('Employee role updated');
                     start();
                 });
@@ -265,6 +282,7 @@ function updateEmployeeRole() {
 
 //Function to view all roles
 function ViewAllRoles() {
+    console.clear();
     const query = `
         SELECT 
             r.id AS id,
@@ -276,6 +294,7 @@ function ViewAllRoles() {
         `;  
     connection.query(query, (err, res) => {
         if (err) throw err;
+        console.clear();
         console.table(res);
         start();
     });
@@ -283,6 +302,7 @@ function ViewAllRoles() {
 
 //function to add a role
 function addRole() {
+    console.clear();
     connection.query('SELECT * FROM departments', (err, res) => {
         if (err) throw err;
         const departments = res.map(department => {
@@ -311,6 +331,7 @@ function addRole() {
         ]).then(answer => {
             connection.query('INSERT INTO roles SET ?', { title: answer.title, salary: answer.salary, department_id: answer.department }, (err, res) => {
                 if (err) throw err;
+                console.clear();
                 console.log('Role added');
                 start();
             });
@@ -320,6 +341,7 @@ function addRole() {
 
 //delete a role
 function deleteRole() {
+    console.clear();
     connection.query('SELECT * FROM roles', (err, res) => {
         if (err) throw err;
         const roles = res.map(role => {
@@ -336,6 +358,7 @@ function deleteRole() {
         }).then(answer => {
             connection.query('DELETE FROM roles WHERE id = ?', answer.role, (err, res) => {
                 if (err) throw err;
+                console.clear();
                 console.log('Role deleted');
                 start();
             });
@@ -345,6 +368,7 @@ function deleteRole() {
 
 //budget by department
 function budgetByDepartment() {
+    console.clear();
     const query = `
         SELECT 
             departments.name AS Department,
@@ -356,6 +380,7 @@ function budgetByDepartment() {
     `;
     connection.query(query, (err, res) => {
         if (err) throw err;
+        console.clear();
         console.table(res);
         start();
     });

@@ -1,7 +1,7 @@
 # Employee Tracker
 
 ## Video Link
-[Video](https://drive.google.com/file/d/11-j28jVqgKJZMORidm32HHIQiuAEkH5k/view)
+[Video](https://drive.google.com/file/d/1qPJJv4dr2cd1NC5ub-X1v-PUr9lIcMoh/view)
 
 ## Description
     - As a developer I wanted to be able to track a companies departments, employees and roles, and be able to update/add/delete anything
@@ -37,7 +37,13 @@ Finally in the terminal to run `node app.js` to start the app.
 
 
 ## Usage
-    Once the app is started you will have a list of options to scroll through in the cli, pick the option you want to explore. If it is a standard view choice, a table with the requested data will appear. If it is an add/update/delete option, the user will be asked for additional inputs to manipulate the database. Once completed the user will see a relevant table with updated info, and will be returned to the main menu.
+    Once the app is started you will have a list of options to scroll through in the cli, pick the option you want to explore. If it is a standard view choice, a table with the requested data will appear. If it is an add/update/delete option, the user will be asked for additional inputs to manipulate the database. Once completed the user will be able to navigate to the relevant view choice to see the change that has been made, and will be returned to the main menu after each choice is completed.
+
+![Screenshots of main menu](assets/menu.PNG)
+   
+![Screenshots of view all employees output](assets/employees.PNG)
+
+![Screenshot of budget output](assets/budget.PNG)
 
 ## Credits
     N/A
@@ -46,76 +52,15 @@ Finally in the terminal to run `node app.js` to start the app.
     N/A
 
 ## Code Source
-    Code fully written by Thomas Neylon, references were made to previous classwork, and and the websites below.
+    Code fully written by Thomas Neylon, references were made to previous classwork, and the websites below.
     
-[Validate in Inquirer](https://stackoverflow.com/questions/57321266/how-to-test-inquirer-validation)
+[Console.table](https://www.syncfusion.com/blogs/post/11-console-methods-in-javascript-for-effective-debugging.aspx)
    
-[SVG using JS](hhttps://stackoverflow.com/questions/54081437/how-to-dynamically-create-svg-text-elements-using-js)
+[Concat SQL](https://stackoverflow.com/questions/3251600/how-do-i-get-first-name-and-last-name-as-whole-name-in-a-mysql-query)
 
+[Combine multiple cols from multiple tables](https://stackoverflow.com/questions/8303275/select-multiple-columns-from-multiple-tables)
 
+[Choices Inquirer](https://stackoverflow.com/questions/46210279/pass-objects-in-array-into-inquirer-list-choices)
 
+[Unshift Array](https://www.w3schools.com/jsref/jsref_unshift.asp)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-include user needs to make a connection.js file with this and their info
-```
-const mysql = require('mysql2');
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'your_username',
-  password: 'your_password',
-  database: 'employee_tracker'
-});
-
-connection.connect(err => {
-  if (err) throw err;
-});
-
-module.exports = connection;
-```
-
-console.table
-https://www.syncfusion.com/blogs/post/11-console-methods-in-javascript-for-effective-debugging.aspx
-
-concat 2 colums to a new one mySQL
-https://stackoverflow.com/questions/3251600/how-do-i-get-first-name-and-last-name-as-whole-name-in-a-mysql-query
-
-combine multiple columns from multiple tables
-https://stackoverflow.com/questions/8303275/select-multiple-columns-from-multiple-tables
-
-from "the table name ex. tableName" "a one or 2 character prefix for dot notation ex. t "
-    FROM tableName t
-https://stackoverflow.com/questions/8303275/select-multiple-columns-from-multiple-tables
-
-object array for choices inquirer
-https://stackoverflow.com/questions/46210279/pass-objects-in-array-into-inquirer-list-choices
-
-unshift
-https://www.w3schools.com/jsref/jsref_unshift.asp
