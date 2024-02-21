@@ -9,6 +9,7 @@ function start() {
     choices: [
       'View all Employees',
       'Add Employee',
+      'Update Employee Role',
       'Delete Employee',
       'View All Roles',
       'Add Role',
@@ -16,6 +17,7 @@ function start() {
       'View All Departments',
       'Add Department',
       'Delete Department',
+      'Budget by Department',
       'Exit'
     ]
   }).then(answer => {
@@ -25,6 +27,9 @@ function start() {
         break;
       case 'Add Employee':
         addEmployee(); 
+        break;
+      case 'Update Employee Role':
+        updateEmployeeRole();
         break;
       case 'Delete Employee':
         deleteEmployee();
@@ -47,6 +52,9 @@ function start() {
       case 'Delete Department':
         deleteDepartment();
         break;
+      case 'Budget by Department':
+        budgetByDepartment();
+        break;  
       default:
         // Exits the application when exit is chosen
         connection.end();
@@ -101,7 +109,7 @@ function addEmployee() {
 
             // Adds a None option to the managersChoices array by unshifting it to the beginning of the array
             managersChoices.unshift({ name: 'None', value: null });
-            
+
             inquirer.prompt([
                 {
                     name: 'first_name',
@@ -213,6 +221,48 @@ function deleteDepartment() {
     });
 }
 
+//function to update an employee role
+function updateEmployeeRole() {
+    connection.query('SELECT * FROM employees', (err, employees) => {
+        if (err) throw err;
+        const employeesChoices = employees.map(employee => {
+            return {
+                name: `${employee.first_name} ${employee.last_name}`,
+                value: employee.id
+            };
+        });
+        connection.query('SELECT * FROM roles', (err, roles) => {
+            if (err) throw err;
+            const rolesChoices = roles.map(role => {
+                return {
+                    name: role.title,
+                    value: role.id
+                };
+            });
+            inquirer.prompt([
+                {
+                    name: 'employee_id',
+                    type: 'list',
+                    message: 'Which employee would you like to update?',
+                    choices: employeesChoices
+                },
+                {
+                    name: 'role_id',
+                    type: 'list',
+                    message: 'What is the employees new role?',
+                    choices: rolesChoices
+                }
+            ]).then(answer => {
+                connection.query('UPDATE employees SET role_id = ? WHERE id = ?', [answer.role_id, answer.employee_id], (err, res) => {
+                    if (err) throw err;
+                    console.log('Employee role updated');
+                    start();
+                });
+            });
+        });
+    });
+}
+
 //Function to view all roles
 function ViewAllRoles() {
     const query = `
@@ -290,6 +340,24 @@ function deleteRole() {
                 start();
             });
         });
+    });
+}
+
+//budget by department
+function budgetByDepartment() {
+    const query = `
+        SELECT 
+            departments.name AS Department,
+            SUM(roles.salary) AS Budget
+        FROM employees
+        LEFT JOIN roles ON employees.role_id = roles.id
+        LEFT JOIN departments ON roles.department_id = departments.id
+        GROUP BY departments.name
+    `;
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        start();
     });
 }
 
